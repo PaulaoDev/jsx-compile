@@ -38,7 +38,7 @@ var parse_jsx = jsx => {
 
   Array.from(matches).map(pattern => {
     if (!is_html(pattern)) return;
-    var new_v = "`" + pattern.trim().slice(1, -2) + "`";
+    var new_v = "`" + pattern.trim().slice(1, -2) + "`;";
     if (/{{(.*)}}/gim.test(new_v)) {
       Array.from(new_v.match(/{{(.*?)}}/g)).map(v => {
         var nv = "${" + v.replace(/(\{\{|\}\})/gim, "").trim() + "}";
