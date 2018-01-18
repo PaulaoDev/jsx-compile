@@ -35,19 +35,17 @@ var parse_jsx = jsx => {
   let is_html = code => /\<(.*)\>(.*)\<\/(.*)\>/.test(code);
 
   if (!Array.isArray(matches)) return;
-
-  Array.from(matches).map(pattern => {
-    if (!is_html(pattern)) return;
-    var new_v = "`" + pattern.trim().slice(1, -2) + "`;";
-    if (/{{(.*)}}/gim.test(new_v)) {
-      Array.from(new_v.match(/{{(.*?)}}/g)).map(v => {
-        var nv = "${" + v.replace(/(\{\{|\}\})/gim, "").trim() + "}";
-        new_v = new_v.replace(v, nv);
-      });
+  
+  Array.from(matches).map((m) => {
+  	if(is_html(m)){
+      let novo = m;
+      novo = novo.replace(/[\(|\)]/gim, '`')
+                .replace(/\{/gim, '${')
+                .replace(/\}/gim, '}')
+              .replace(/\s\s/gim, '').trim() + '\n';
+      clean = clean.replace(m, novo);
     }
-    new_v = new_v.replace(/(\s\s|\n)/gim, "");
-    clean = clean.replace(pattern, new_v);
-  }); // new_v
+  });
 
   var rt = `
                 var exports = {},
